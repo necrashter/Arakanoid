@@ -3,6 +3,8 @@
 #include "load_resources.h"
 #include <cstdio>
 
+const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 480;
 SDL_Window* window = NULL;
 SDL_Surface* screenSurface = NULL;
 
