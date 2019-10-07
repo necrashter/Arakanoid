@@ -19,3 +19,8 @@ Run:
 cd build
 ./main
 ```
+
+If you want to remove all of the compiled objects and executable:
+```
+make clean
+```

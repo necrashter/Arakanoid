@@ -5,3 +5,7 @@ all: main
 
 main: src/main.cpp src/load_resources.o src/sprite.o
 	$(LINK.cpp) $^ $(LOADLIBES) $(LDLIBS) -o ./build/$@
+
+clean:
+	rm -f build/main
+	rm -f src/*.o
