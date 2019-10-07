@@ -13,6 +13,8 @@ extern SDL_Window* window;
 
 //The surface contained by the window
 extern SDL_Surface* screenSurface;
+// renderer for window, hardware rendering
+extern SDL_Renderer* renderer;
 
 
 bool sdl_init();

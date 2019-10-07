@@ -5,9 +5,10 @@
 #include <SDL2/SDL_image.h>
 #include <string>
 
-extern SDL_Surface* gHelloWorld;
+extern SDL_Texture* testTexture;
 
 SDL_Surface* load_surface(std::string path);
+SDL_Texture* load_texture(std::string path);
 
 void load_resources();
 void free_resources();
