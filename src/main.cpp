@@ -12,11 +12,11 @@ SDL_Renderer* renderer = NULL;
 
 bool sdl_init() {
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
-        printf( "SDL_Init failed! SDL_Error: %s\n", SDL_GetError() );
+        fprintf(stderr, "SDL_Init failed! SDL_Error: %s\n", SDL_GetError() );
     }else{
         window = SDL_CreateWindow( "Arakanoid", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
         if( window == NULL ) {
-            printf( "SDL_CreateWindow failed! SDL_Error: %s\n", SDL_GetError() );
+            fprintf(stderr, "SDL_CreateWindow failed! SDL_Error: %s\n", SDL_GetError() );
         }
         else {
 			// init SDL_Renderer
@@ -30,7 +30,7 @@ bool sdl_init() {
 				// Initialize SDL_image
 				int image_flags = IMG_INIT_PNG; // we need to load some pngs
 				if( !(IMG_Init(image_flags)&&image_flags)){
-					printf( "IMG_Init failed! SDL_Error: %s\n", SDL_GetError() );
+					fprintf(stderr, "IMG_Init failed! SDL_Error: %s\n", SDL_GetError() );
 				} else {
 					screenSurface = SDL_GetWindowSurface( window );
 					return true;
@@ -66,9 +66,9 @@ void game_loop(){
 			if(e.type==SDL_QUIT){
 				running=false;
 			} else if(e.type==SDL_KEYDOWN) {
-				printf("KEYDOWN: %d\n", e.key.keysym.sym);
+				fprintf(stderr,"KEYDOWN: %d\n", e.key.keysym.sym);
 			} else if(e.type==SDL_KEYUP) {
-				printf("KEYUP:   %d\n", e.key.keysym.sym);
+				fprintf(stderr,"KEYUP:   %d\n", e.key.keysym.sym);
 			}
 		} // end event handling
 
@@ -88,7 +88,7 @@ void game_loop(){
 
 int main( int argc, char* args[] ) {
 	if(!sdl_init()){
-		printf("SDL couldn't initialize.\n");
+		fprintf(stderr,"SDL couldn't initialize.\n");
 	}else{
 		load_resources();
 		game_loop();
