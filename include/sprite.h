@@ -20,6 +20,10 @@ public:
 	// getters and setters can be defined right here,
 	// as we want these functions to be inlined
 	// don't forget to make getters const
+
+	//const SDL_Rect& getTextureRegion() const { return textureRegion; }
+	SDL_Rect getTextureRegion() { return textureRegion; }
+	void setTextureRegion(SDL_Rect& a) { textureRegion = a; }
 };
 
 #endif
