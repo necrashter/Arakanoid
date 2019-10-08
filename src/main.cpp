@@ -2,10 +2,14 @@
 
 #include "load_resources.h"
 #include "sprite.h"
+// old-school printf and fprintf
 #include <cstdio>
+// string stream
+#include <sstream>
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
+const int MILLISECONDS_PER_FRAME = 1000/60;
 
 SDL_Window* window = NULL;
 SDL_Surface* screenSurface = NULL;
@@ -68,7 +72,16 @@ void game_loop(){
 	//screenRect.h = SCREEN_HEIGHT;
 	Sprite testSprite(spriteSheet, SDL_Rect{0,0,300,300}, SDL_Rect{40,40,320,320});
 	RenderedText testText("Hello World!",regular_font, SDL_Color{255,255,255,255});
+
+	Uint32 previousFrame = 0;
+	std::stringstream fpsText;
 	while(running){
+		// Get the time passed since last frame
+		// IN MILLISECONDS
+		Uint32 delta = SDL_GetTicks() - previousFrame;
+		if(delta<MILLISECONDS_PER_FRAME)continue;
+		previousFrame = SDL_GetTicks();
+
 		while(SDL_PollEvent(&e)!=0){
 			if(e.type==SDL_QUIT){
 				running=false;
@@ -78,6 +91,10 @@ void game_loop(){
 				fprintf(stderr,"KEYUP:   %d\n", e.key.keysym.sym);
 			}
 		} // end event handling
+
+		fpsText.str("");
+		fpsText << "FPS: " << 1000.0f/delta;
+		testText.setString(fpsText.str());
 
 		//SDL_BlitScaled( gHelloWorld, NULL, screenSurface, &screenRect );
 		//SDL_UpdateWindowSurface( window ); // call after every blit
