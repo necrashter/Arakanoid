@@ -2,6 +2,7 @@
 #include "main.h"
 
 SDL_Texture* testTexture = NULL;
+SDL_Texture* spriteSheet = NULL;
 
 SDL_Surface* load_surface( std::string path ){
     //The final optimized image
@@ -43,6 +44,7 @@ SDL_Texture* load_texture( std::string path ){
 
 void load_resources() {
 	testTexture = load_texture("gfx/test.png");
+	spriteSheet = load_texture("gfx/sh_2.png");
 }
 
 void free_resources() {

@@ -6,6 +6,7 @@
 #include <string>
 
 extern SDL_Texture* testTexture;
+extern SDL_Texture* spriteSheet;
 
 SDL_Surface* load_surface(std::string path);
 SDL_Texture* load_texture(std::string path);
