@@ -3,6 +3,7 @@
 
 SDL_Texture* testTexture = NULL;
 SDL_Texture* spriteSheet = NULL;
+TTF_Font* regular_font = NULL;
 
 SDL_Surface* load_surface( std::string path ){
     //The final optimized image
@@ -45,8 +46,11 @@ SDL_Texture* load_texture( std::string path ){
 void load_resources() {
 	testTexture = load_texture("gfx/test.png");
 	spriteSheet = load_texture("gfx/sh_2.png");
+	regular_font = TTF_OpenFont("fonts/Grenze-Regular.ttf", 32 );
 }
 
 void free_resources() {
+    TTF_CloseFont(regular_font);
 	SDL_DestroyTexture(testTexture);
+	SDL_DestroyTexture(spriteSheet);
 }
