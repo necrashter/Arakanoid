@@ -3,7 +3,7 @@ CXXFLAGS=-I./include
 
 all: main
 
-main: src/main.cpp src/load_resources.o src/sprite.o
+main: src/main.cpp src/load_resources.o src/sprite.o src/entity.o
 	$(LINK.cpp) $^ $(LOADLIBES) $(LDLIBS) -o ./build/$@
 
 clean:

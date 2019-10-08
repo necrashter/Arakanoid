@@ -3,10 +3,13 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <string>
 
 extern SDL_Texture* testTexture;
 extern SDL_Texture* spriteSheet;
+
+extern TTF_Font* regular_font;
 
 SDL_Surface* load_surface(std::string path);
 SDL_Texture* load_texture(std::string path);
