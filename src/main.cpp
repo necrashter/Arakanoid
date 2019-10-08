@@ -70,7 +70,8 @@ void game_loop(){
 	//screenRect.y = 0;
 	//screenRect.w = SCREEN_WIDTH;
 	//screenRect.h = SCREEN_HEIGHT;
-	Sprite testSprite(spriteSheet, SDL_Rect{0,0,300,300}, SDL_Rect{40,40,320,320});
+	Sprite playerSprite(spriteSheet, SDL_Rect{25,190,71,25}, SDL_Rect{40,440,71,25});
+	Sprite testSprite(spriteSheet, SDL_Rect{5,70,67,27}, SDL_Rect{40,40,67,24});
 	RenderedText testText("Hello World!",regular_font, SDL_Color{255,255,255,255});
 
 	Uint32 previousFrame = 0;
@@ -96,6 +97,12 @@ void game_loop(){
 		fpsText << "FPS: " << 1000.0f/delta;
 		testText.setString(fpsText.str());
 
+		SDL_Rect newPos = playerSprite.getPosition();
+		int mousex,mousey;
+		SDL_GetMouseState(&mousex,&mousey);
+		newPos.x=mousex;
+		playerSprite.setPosition(newPos);
+
 		//SDL_BlitScaled( gHelloWorld, NULL, screenSurface, &screenRect );
 		//SDL_UpdateWindowSurface( window ); // call after every blit
 
@@ -107,6 +114,7 @@ void game_loop(){
 		//SDL_RenderCopy(renderer,testTexture, NULL, NULL);
 
 		testSprite.render();
+		playerSprite.render();
 
 		testText.render();
 
