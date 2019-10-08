@@ -31,7 +31,7 @@ public:
 	vector_phys operator +(vector_phys lhs){
 		vector_phys res;
 		res.x=x+lhs.x;
-		res.y=y*lhs.y;
+		res.y=y+lhs.y;
 		return res;
 	}
 	vector_phys negative_horizon(){
@@ -77,7 +77,9 @@ protected:
 	vector_phys<phys_t> speed;
 public:
 	DynamicEntity(Sprite sprite_arg,vector_phys<phys_t> position_arg,vector_phys<phys_t> speed_arg):Entity(sprite_arg,position_arg),speed(speed_arg){}
-	virtual void update(float delta);
+	virtual void update(float delta){
+		position=position+speed*delta;
+	}
 
 };
 
