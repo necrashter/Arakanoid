@@ -31,6 +31,11 @@ public:
 	 SDL_Texture* getTexture() const{return texture;}
 	void setTexture(SDL_Texture* a) { texture = a; }
 
+	void setPosition(int x,int y){
+		position.x=x;
+		position.y=y;
+	}
+
 	friend class RenderedText;
 };
 

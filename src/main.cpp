@@ -2,6 +2,7 @@
 
 #include "load_resources.h"
 #include "sprite.h"
+#include "entity.h"
 // old-school printf and fprintf
 #include <cstdio>
 // string stream
@@ -65,13 +66,12 @@ void game_loop(){
 
 	SDL_Event e;
 
-	//SDL_Rect screenRect;
-	//screenRect.x = 0;
-	//screenRect.y = 0;
-	//screenRect.w = SCREEN_WIDTH;
-	//screenRect.h = SCREEN_HEIGHT;
 	Sprite playerSprite(spriteSheet, SDL_Rect{25,190,71,25}, SDL_Rect{40,440,71,25});
 	Sprite testSprite(spriteSheet, SDL_Rect{5,70,67,27}, SDL_Rect{40,40,67,24});
+
+	Entity testEnt(testSprite);
+	Entity playerEnt(playerSprite);
+
 	RenderedText testText("Hello World!",regular_font, SDL_Color{255,255,255,255});
 
 	Uint32 previousFrame = 0;
@@ -97,24 +97,22 @@ void game_loop(){
 		fpsText << "FPS: " << 1000.0f/delta;
 		testText.setString(fpsText.str());
 
-		SDL_Rect newPos = playerSprite.getPosition();
 		int mousex,mousey;
 		SDL_GetMouseState(&mousex,&mousey);
-		newPos.x=mousex;
-		playerSprite.setPosition(newPos);
+		playerEnt.setPosition(mousex,playerEnt.getHitbox().y);
 
 		//SDL_BlitScaled( gHelloWorld, NULL, screenSurface, &screenRect );
 		//SDL_UpdateWindowSurface( window ); // call after every blit
 
-		SDL_SetRenderDrawColor(renderer, 122, 122, 121, 255);
+		SDL_SetRenderDrawColor(renderer, 56, 60, 74, 255);
 		SDL_RenderClear(renderer); // clear the screen
 
 		// first null is srcrect, which is the entire texture
 		// seconde null is dstrect, which is the entire screen
 		//SDL_RenderCopy(renderer,testTexture, NULL, NULL);
 
-		testSprite.render();
-		playerSprite.render();
+		testEnt.render();
+		playerEnt.render();
 
 		testText.render();
 
