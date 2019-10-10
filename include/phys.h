@@ -42,6 +42,14 @@ public:
 		res.y=-y;
 		return res;
 	}
+
+	void flip_horizontal(){
+		x=-x;
+	}
+
+	void flip_vertical(){
+		y=-y;
+	}
 };
 
 
@@ -58,10 +66,16 @@ public:
 		w=0;
 		h=0;
 	}
-	
+
 	bool intersects(const box_phys& other){
 		return (x< other.x+other.w) && (x+w > other.x) &&
 				(y < other.y+other.h) && (y+h > other.y);
+	}
+
+	box_phys& operator +=(vector_phys<T> lhs){
+		x+=lhs.x;
+		y+=lhs.y;
+		return *this;
 	}
 };
 

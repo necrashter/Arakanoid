@@ -8,7 +8,7 @@ class Entity{
 protected:
 	Sprite sprite_entity;
 	box_phys<phys_t> hitbox;
-
+	void positionUpdated();
 public:
 	Entity(Sprite sprite_arg);
 
@@ -24,40 +24,27 @@ public:
 	void setPosition(vector_phys<phys_t> position_arg){
 		hitbox.x = position_arg.x;
 		hitbox.y = position_arg.y;
-		sprite_entity.setPosition(hitbox.x,hitbox.y);
+		positionUpdated();
 	}
 	void setPosition(phys_t x, phys_t y){
 		hitbox.x = x;
 		hitbox.y = y;
-		sprite_entity.setPosition(x,y);
+		positionUpdated();
 	}
 	box_phys<phys_t> getHitbox() const {return hitbox;}
 };
 
 class DynamicEntity: public Entity{
 protected:
-	vector_phys<phys_t> speed;
+	vector_phys<phys_t> velocity;
 public:
 	DynamicEntity(Sprite sprite_arg,
-		vector_phys<phys_t> speed_arg):
-		Entity(sprite_arg),speed(speed_arg){}
+		vector_phys<phys_t> velocity_arg):
+		Entity(sprite_arg),velocity(velocity_arg){}
+
 	virtual void update(float delta);
 
 };
 
-class Ball: public DynamicEntity{
-public:
-	Ball(Sprite sprite_arg,vector_phys<phys_t> speed_arg):
-	DynamicEntity(sprite_arg,speed_arg){}
-	void collision(); //if horizontal  Ball.speed===negative_horizon, if vertical Ball.speed===negative_vertical (according to implemention of negative funcs. )
-};
-
-class Brick: public Entity{
-public:
-	void breaking();
-	void collision(){breaking();}
-};
-
-class Bar: public DynamicEntity{};
 
 #endif

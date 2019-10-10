@@ -1,4 +1,6 @@
 #include "entity.h"
+#include "math.h"
+#include "main.h"
 
 Entity::Entity(Sprite sprite_arg):
 	sprite_entity(sprite_arg){
@@ -23,4 +25,19 @@ bool Entity::checkCollision(const Entity& other){
 
 void Entity::render(){
 	sprite_entity.render();
+}
+
+void Entity::positionUpdated(){
+	sprite_entity.setPosition(roundf(hitbox.x),roundf(hitbox.y));
+}
+
+
+/////////////// DynamicEntity //////////////
+
+void DynamicEntity::update(float delta) {
+	hitbox += velocity*delta;
+	positionUpdated();
+
+	if(hitbox.x+hitbox.w>SCREEN_WIDTH || hitbox.x<0) velocity.flip_horizontal();
+	if(hitbox.y+hitbox.h>SCREEN_HEIGHT || hitbox.y<0) velocity.flip_vertical();
 }

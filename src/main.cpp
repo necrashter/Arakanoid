@@ -3,6 +3,7 @@
 #include "load_resources.h"
 #include "sprite.h"
 #include "entity.h"
+#include "game_entities.h"
 // old-school printf and fprintf
 #include <cstdio>
 // string stream
@@ -69,8 +70,8 @@ void game_loop(){
 	Sprite playerSprite(spriteSheet, SDL_Rect{25,190,71,25}, SDL_Rect{40,440,71,25});
 	Sprite testSprite(spriteSheet, SDL_Rect{5,70,67,27}, SDL_Rect{40,40,67,24});
 
-	Entity testEnt(testSprite);
-	Entity playerEnt(playerSprite);
+	DynamicEntity testEnt(testSprite, vector_phys<phys_t>(60.f,60.f));
+	Bar playerEnt(playerSprite);
 
 	RenderedText testText("Hello World!",regular_font, SDL_Color{255,255,255,255});
 
@@ -83,6 +84,8 @@ void game_loop(){
 		if(delta<MILLISECONDS_PER_FRAME)continue;
 		previousFrame = SDL_GetTicks();
 
+		float dt = ((float)delta) / 1000.0f; // delta time in seconds
+
 		while(SDL_PollEvent(&e)!=0){
 			if(e.type==SDL_QUIT){
 				running=false;
@@ -93,13 +96,13 @@ void game_loop(){
 			}
 		} // end event handling
 
+
+		testEnt.update(dt);
+		playerEnt.update(dt);
+
 		fpsText.str("");
 		fpsText << "FPS: " << 1000.0f/delta;
 		testText.setString(fpsText.str());
-
-		int mousex,mousey;
-		SDL_GetMouseState(&mousex,&mousey);
-		playerEnt.setPosition(mousex,playerEnt.getHitbox().y);
 
 		//SDL_BlitScaled( gHelloWorld, NULL, screenSurface, &screenRect );
 		//SDL_UpdateWindowSurface( window ); // call after every blit
