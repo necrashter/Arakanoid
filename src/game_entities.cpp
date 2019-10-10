@@ -12,7 +12,7 @@ void Bar::update(float delta){
 	// first change speed depending on the mouse postion
 	int mousex,mousey;
 	SDL_GetMouseState(&mousex,&mousey);
-	velocity.x += (mousex-hitbox.x)/5f;
+	velocity.x = (mousex-hitbox.x)*100.0;
 	if(velocity.x>MAX_BAR_SPEED)velocity.x = MAX_BAR_SPEED;
 	if(velocity.x<-MAX_BAR_SPEED)velocity.x = -MAX_BAR_SPEED;
 	DynamicEntity::update(delta);
