@@ -63,8 +63,8 @@ public:
 	box_phys(T a=0,T b=0,T c=0, T d=0){
 		x=a;
 		y=b;
-		w=0;
-		h=0;
+		w=c;
+		h=d;
 	}
 
 	bool intersects(const box_phys& other){
