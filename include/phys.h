@@ -30,18 +30,6 @@ public:
 		res.y=y+lhs.y;
 		return res;
 	}
-	vector_phys negative_horizon(){
-		vector_phys res;
-		res.x=-x;
-		res.y=y;
-		return res;
-	}
-	vector_phys negative_vertical(){
-		vector_phys res;
-		res.x=x;
-		res.y=-y;
-		return res;
-	}
 
 	void flip_horizontal(){
 		x=-x;
@@ -50,6 +38,8 @@ public:
 	void flip_vertical(){
 		y=-y;
 	}
+	T get_x(){return x;}
+	T get_y(){return y;}
 };
 
 

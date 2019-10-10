@@ -33,6 +33,7 @@ public:
 	}
 	box_phys<phys_t> getHitbox() const {return hitbox;}
 };
+virtual string get_entityType();
 
 class DynamicEntity: public Entity{
 protected:
