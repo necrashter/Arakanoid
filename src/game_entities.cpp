@@ -20,12 +20,12 @@ void Bar::update(float delta){
 
 void Ball::collision(Entity* entity_arg){
 	string entityType= entity_arg->get_entityType();
-	if(entityType="Brick"){
+	if(entityType=="Brick"){
 		if(1/*according to collision,horizontal*/) velocity.flip_horizontal();
 		else velocity.flip_vertical();// vertical collision
 		((Brick*)entity_arg)->breaking();
 	}
-	else if(entityType="Bar"){
+	else if(entityType=="Bar"){
 			if(1/*according to collision,vertical*/){
 				velocity.flip_vertical();
 				velocity.x+=((Bar*)entity_arg)->get_x();
