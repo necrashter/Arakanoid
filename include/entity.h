@@ -19,6 +19,8 @@ public:
 	SDL_Rect position_arg);
 
 	virtual bool checkCollision(const Entity& other);
+	bool checkHorizontalCollision(const Entity& other);
+	bool checkVerticalCollision(const Entity& other);
 	void render();
 
 	void setPosition(vector_phys<phys_t> position_arg){
@@ -45,6 +47,8 @@ public:
 
 	virtual void update(float delta);
 
+	void flip_velocity_horizontal(){velocity.flip_horizontal();}
+	void flip_velocity_vertical(){velocity.flip_vertical();}
 };
 
 

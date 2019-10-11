@@ -1,4 +1,4 @@
 build/main
 src/load_resources.o
 src/sprite.o
-src/entity.o
+src/*.o

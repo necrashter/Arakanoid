@@ -8,6 +8,7 @@
 #include <cstdio>
 // string stream
 #include <sstream>
+#include <vector>
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -68,23 +69,29 @@ void game_loop(){
 	SDL_Event e;
 
 	Sprite playerSprite(spriteSheet, SDL_Rect{25,190,71,25}, SDL_Rect{40,440,71,25});
-	Sprite testSprite(spriteSheet, SDL_Rect{5,70,67,27}, SDL_Rect{40,40,67,24});
+	Sprite yellowBrick(spriteSheet, SDL_Rect{5,70,67,27}, SDL_Rect{40,40,67,24});
+	Sprite ballSprite(spriteSheet, SDL_Rect{285,202,14,14}, SDL_Rect{SCREEN_WIDTH/2-7,SCREEN_HEIGHT/2-7,14,14});
 
-	DynamicEntity testEnt(testSprite, vector_phys<phys_t>(60.f,60.f));
+	//DynamicEntity testEnt(testSprite, vector_phys<phys_t>(60.f,60.f));
 	Bar playerEnt(playerSprite);
+	Ball ballEnt(ballSprite, vector_phys<phys_t>(60.f,60.f));
+	std::vector<Brick> bricks;
+	for(int i=0;i<9;++i){
+		for(int j=0;j<10;++j){
+			Brick newBrick(yellowBrick, 20+i*67, 40+j*24);
+			bricks.push_back(newBrick);
+		}
+	}
 
 	RenderedText testText("Hello World!",regular_font, SDL_Color{255,255,255,255});
 
-	Uint32 previousFrame = 0;
+	Uint32 previousFrame = -MILLISECONDS_PER_FRAME;
 	std::stringstream fpsText;
-	while(running){
+	while(running)if(SDL_GetTicks() - previousFrame >= MILLISECONDS_PER_FRAME){
 		// Get the time passed since last frame
 		// IN MILLISECONDS
-		Uint32 delta = SDL_GetTicks() - previousFrame;
-		if(delta<MILLISECONDS_PER_FRAME)continue;
-		previousFrame = SDL_GetTicks();
 
-		float dt = ((float)delta) / 1000.0f; // delta time in seconds
+		float dt = ((float)(SDL_GetTicks() - previousFrame)) / 1000.0f; // delta time in seconds
 
 		while(SDL_PollEvent(&e)!=0){
 			if(e.type==SDL_QUIT){
@@ -96,12 +103,22 @@ void game_loop(){
 			}
 		} // end event handling
 
-
-		testEnt.update(dt);
 		playerEnt.update(dt);
+		ballEnt.update(dt);
+
+		auto it=bricks.begin();
+		while(it!=bricks.end()){
+			if(it->checkCollision(ballEnt)){
+				// erase invalidates the iterator
+				// use returned iterator
+				it = bricks.erase(it);
+			}else{
+				++it;
+			}
+		}
 
 		fpsText.str("");
-		fpsText << "FPS: " << 1000.0f/delta;
+		fpsText << "FPS: " << 1.0f/dt;
 		testText.setString(fpsText.str());
 
 		//SDL_BlitScaled( gHelloWorld, NULL, screenSurface, &screenRect );
@@ -114,12 +131,15 @@ void game_loop(){
 		// seconde null is dstrect, which is the entire screen
 		//SDL_RenderCopy(renderer,testTexture, NULL, NULL);
 
-		testEnt.render();
 		playerEnt.render();
+		ballEnt.render();
+		for(auto it=bricks.begin();it!=bricks.end();++it)it->render();
 
 		testText.render();
 
 		SDL_RenderPresent(renderer); // update
+
+		previousFrame = SDL_GetTicks();
 	} // end game loop
 }
 
