@@ -29,6 +29,26 @@ public:
 	void breaking();
 };
 
+class PowerUp: public DynamicEntity{
+public:
+	PowerUp(Sprite sprite_arg,vector_phys<phys_t>  speed_arg):DynamicEntity(sprite_arg,speed_arg){}
+};
+
+class ExtraBall: public PowerUp{
+
+};
+
+class Laser: public PowerUp{
+
+};
+
+class Enlarge: public PowerUp{
+
+};
+
+class Reduce: public PowerUp{
+
+};
 
 
 #endif

@@ -73,15 +73,20 @@ void game_loop(){
 	Sprite ballSprite(spriteSheet, SDL_Rect{285,202,14,14}, SDL_Rect{320-7,400-7,14,14});
 
 	//DynamicEntity testEnt(testSprite, vector_phys<phys_t>(60.f,60.f));
+	static int lives=3;
 	Bar playerEnt(playerSprite);
+	std::vector<Ball> balls;
 	Ball ballEnt(ballSprite, vector_phys<phys_t>(180.f,180.f), &playerEnt);
+	balls.push_back(ballEnt);
 	std::vector<Brick> bricks;
+
 	for(int i=0;i<9;++i){
 		for(int j=0;j<10;++j){
 			Brick newBrick(yellowBrick, 20+i*67, 40+j*24);
 			bricks.push_back(newBrick);
 		}
 	}
+
 
 	RenderedText testText("Hello World!",regular_font, SDL_Color{255,255,255,255});
 
@@ -108,9 +113,43 @@ void game_loop(){
 		} // end event handling
 
 		playerEnt.update(dt);
-		ballEnt.update(dt);
+		//ballEnt.update(dt);
 
-		auto it=bricks.begin();
+
+		auto it2=balls.begin();
+		while(it2!=balls.end()){
+			it2->update(dt);
+			if(playerEnt.checkCollision(*it2)){
+				it2->barCollision(playerEnt);
+			}
+			auto it=bricks.begin();
+			while(it!=bricks.end()){
+				if(it->checkCollision(*it2)){
+					it2->collision((*it));
+					// erase invalidates the iterator
+					// use returned iterator
+					it = bricks.erase(it);
+				}else{
+					++it;
+				}
+			}
+
+			if(bricks.empty()) /*win */ ;
+			if(balls.empty()) lives--;
+			if(lives==0) /*end game*/;
+
+
+
+			if(hitbox.y>SCREEN_HEIGHT /*bottom*/ && velocity.y>0){
+				// erase invalidates the iterator
+				// use returned iterator
+				it2 = balls.erase(it2);
+			}else{
+				++it2;
+			}
+		}
+
+		/*auto it=bricks.begin();
 		while(it!=bricks.end()){
 			if(it->checkCollision(ballEnt)){
 				ballEnt.collision((*it));
@@ -120,10 +159,23 @@ void game_loop(){
 			}else{
 				++it;
 			}
+		}*/
+
+
+
+		if(playerEnt.checkCollision(/*ExtraBall t*/){
+			for(int i=0;i<2;i++){
+				Ball newBall(ballSprite, vector_phys<phys_t>(180.f*pow(-1,i),180.f), &playerEnt);// they should split up into three directions
+				balls.push_back(newBall);
+			}
 		}
 
-		if(playerEnt.checkCollision(ballEnt)){
-			ballEnt.barCollision(playerEnt);
+		if(playerEnt.checkCollision(/*Laser*/){
+		}
+		if(playerEnt.checkCollision(/*Enlarge*/){
+
+		}
+		if(playerEnt.checkCollision(/*ExtraBall t*/){
 		}
 
 		fpsText.str("");
@@ -141,8 +193,9 @@ void game_loop(){
 		//SDL_RenderCopy(renderer,testTexture, NULL, NULL);
 
 		playerEnt.render();
-		ballEnt.render();
+		//ballEnt.render();
 		for(auto it=bricks.begin();it!=bricks.end();++it)it->render();
+		for(auto it=balls.begin();it!=balls.end();++it)it->render();
 
 		testText.render();
 
