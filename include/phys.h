@@ -72,6 +72,14 @@ public:
 				(y < other.y+other.h) && (y+h > other.y);
 	}
 
+	bool intersectsHorizontal(const box_phys& other){
+		return (x< other.x+other.w) && (x+w > other.x);
+	}
+
+	bool intersectsVertical(const box_phys& other){
+		return (y < other.y+other.h) && (y+h > other.y);
+	}
+
 	box_phys& operator +=(vector_phys<T> lhs){
 		x+=lhs.x;
 		y+=lhs.y;

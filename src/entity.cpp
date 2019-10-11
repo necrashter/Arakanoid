@@ -23,6 +23,13 @@ bool Entity::checkCollision(const Entity& other){
 	return hitbox.intersects(other.getHitbox());
 }
 
+bool Entity::checkHorizontalCollision(const Entity& other){
+	return hitbox.intersectsHorizontal(other.getHitbox());
+}
+bool Entity::checkVerticalCollision(const Entity& other){
+	return hitbox.intersectsVertical(other.getHitbox());
+}
+
 void Entity::render(){
 	sprite_entity.render();
 }
@@ -38,6 +45,6 @@ void DynamicEntity::update(float delta) {
 	hitbox += velocity*delta;
 	positionUpdated();
 
-	if(hitbox.x+hitbox.w>SCREEN_WIDTH || hitbox.x<0) velocity.flip_horizontal();
+	if(hitbox.x+hitbox.w>SCREEN_WIDTH && velocity.x>0 || velocity.x<0 && hitbox.x<0) velocity.flip_horizontal();
 	if(hitbox.y+hitbox.h>SCREEN_HEIGHT || hitbox.y<0) velocity.flip_vertical();
 }
