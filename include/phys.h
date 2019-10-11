@@ -38,8 +38,6 @@ public:
 	void flip_vertical(){
 		y=-y;
 	}
-	T get_x(){return x;}
-	T get_y(){return y;}
 };
 
 
@@ -62,12 +60,15 @@ public:
 				(y < other.y+other.h) && (y+h > other.y);
 	}
 
+	// horizontal intersection, but not inclusion
 	bool intersectsHorizontal(const box_phys& other){
-		return (x< other.x+other.w) && (x+w > other.x);
+		return (x< other.x+other.w) && (x+w > other.x)
+				&& !(x+w<other.x+other.w && x>other.x);
 	}
-
+	// veritcal intersection, but not inclusion
 	bool intersectsVertical(const box_phys& other){
-		return (y < other.y+other.h) && (y+h > other.y);
+		return (y < other.y+other.h) && (y+h > other.y)
+				&& !(y+h < other.y+other.h && y>other.y);
 	}
 
 	box_phys& operator +=(vector_phys<T> lhs){

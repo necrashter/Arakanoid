@@ -109,12 +109,17 @@ void game_loop(){
 		auto it=bricks.begin();
 		while(it!=bricks.end()){
 			if(it->checkCollision(ballEnt)){
+				ballEnt.collision((*it));
 				// erase invalidates the iterator
 				// use returned iterator
 				it = bricks.erase(it);
 			}else{
 				++it;
 			}
+		}
+
+		if(playerEnt.checkCollision(ballEnt)){
+			ballEnt.barCollision(playerEnt);
 		}
 
 		fpsText.str("");

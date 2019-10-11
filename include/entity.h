@@ -35,7 +35,6 @@ public:
 	}
 	box_phys<phys_t> getHitbox() const {return hitbox;}
 };
-virtual string get_entityType();
 
 class DynamicEntity: public Entity{
 protected:
@@ -47,8 +46,7 @@ public:
 
 	virtual void update(float delta);
 
-	void flip_velocity_horizontal(){velocity.flip_horizontal();}
-	void flip_velocity_vertical(){velocity.flip_vertical();}
+	vector_phys<phys_t> getVelocity() const{ return velocity; }
 };
 
 
