@@ -8,7 +8,10 @@
 #include <cstdio>
 // string stream
 #include <sstream>
+// dynamic array
 #include <vector>
+// for random
+#include <stdlib.h>
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -63,26 +66,61 @@ void quit() {
 	TTF_Quit();
 }
 
+SDL_Rect redBrickRegion = {83,70,67,27};
+SDL_Rect greenBrickRegion = {165,70,67,27};
+SDL_Rect blueBrickRegion = {243,70,67,27};
+SDL_Rect orangeBrickRegion = {243,277,67,27};
+
+SDL_Rect gunRegion = {83,115,71,63};
+SDL_Rect ballRegion = {165,115,71,63};
+SDL_Rect growRegion = {243,115,71,63};
+
 void game_loop(){
 	bool running = true;
 
 	SDL_Event e;
 
 	Sprite playerSprite(spriteSheet, SDL_Rect{25,190,71,25}, SDL_Rect{40,440,71,25});
+
 	Sprite yellowBrick(spriteSheet, SDL_Rect{5,70,67,27}, SDL_Rect{40,40,67,24});
+
+	Sprite shrinkPowerUp(spriteSheet, SDL_Rect{5,115,71,63}, SDL_Rect{40,40,71,63});
+
 	Sprite ballSprite(spriteSheet, SDL_Rect{285,202,14,14}, SDL_Rect{320-7,400-7,14,14});
 
 	//DynamicEntity testEnt(testSprite, vector_phys<phys_t>(60.f,60.f));
-	static int lives=3;
+	int lives=3;
 	Bar playerEnt(playerSprite);
 	std::vector<Ball> balls;
 	Ball ballEnt(ballSprite, vector_phys<phys_t>(180.f,180.f), &playerEnt);
 	balls.push_back(ballEnt);
 	std::vector<Brick> bricks;
+	std::vector<PowerUp> powerups;
 
 	for(int i=0;i<9;++i){
 		for(int j=0;j<10;++j){
 			Brick newBrick(yellowBrick, 20+i*67, 40+j*24);
+			switch (rand()%10) {
+				case 0:
+				newBrick.setTextureRegion(redBrickRegion);
+				newBrick.type = gun;
+				break;
+
+				case 1:
+				newBrick.setTextureRegion(greenBrickRegion);
+				newBrick.type = ball;
+				break;
+
+				case 2:
+				newBrick.setTextureRegion(blueBrickRegion);
+				newBrick.type = enlarge;
+				break;
+
+				case 3:
+				newBrick.setTextureRegion(orangeBrickRegion);
+				newBrick.type = shrink;
+				break;
+			}
 			bricks.push_back(newBrick);
 		}
 	}
@@ -108,13 +146,12 @@ void game_loop(){
 			} else if(e.type==SDL_KEYUP) {
 				fprintf(stderr,"KEYUP:   %d\n", e.key.keysym.sym);
 			} else if(e.type==SDL_MOUSEBUTTONDOWN){
-				ballEnt.throwBall();
+				if(!balls.empty())balls.begin()->throwBall();
 			}
 		} // end event handling
 
 		playerEnt.update(dt);
 		//ballEnt.update(dt);
-
 
 		auto it2=balls.begin();
 		while(it2!=balls.end()){
@@ -126,74 +163,80 @@ void game_loop(){
 			while(it!=bricks.end()){
 				if(it->checkCollision(*it2)){
 					it2->collision((*it));
+
+					// before erasing the block, we need to add its PowerUp
+					if(it->type!=none){
+						PowerUp newPowerUp(shrinkPowerUp, vector_phys<phys_t>(0,99.9f));
+						newPowerUp.setPosition(it->getHitbox().x-2, it->getHitbox().y);
+						switch (newPowerUp.type=it->type) {
+							case ball: newPowerUp.setTextureRegion(ballRegion);
+							break;
+							case gun: newPowerUp.setTextureRegion(gunRegion);
+							break;
+							case enlarge: newPowerUp.setTextureRegion(growRegion);
+							break;
+						}
+						powerups.push_back(newPowerUp);
+					}
 					// erase invalidates the iterator
 					// use returned iterator
 					it = bricks.erase(it);
+					if(bricks.empty()){
+						printf("You won\n");
+					}
 				}else{
 					++it;
 				}
 			}
 
-			if(bricks.empty()) /*win */ ;
-			if(balls.empty()) lives--;
-			if(lives==0) /*end game*/;
-
-
-
-			if(hitbox.y>SCREEN_HEIGHT /*bottom*/ && velocity.y>0){
+			if(it2->isFallen()){
 				// erase invalidates the iterator
 				// use returned iterator
 				it2 = balls.erase(it2);
+				if(balls.empty()){
+					lives--;
+					if(lives<=0){
+						printf("You lose\n");
+					}else{
+						Ball newBall(ballSprite, vector_phys<phys_t>(180.f,180.f), &playerEnt);
+						balls.push_back(newBall);
+					}
+				}
 			}else{
 				++it2;
 			}
 		}
 
-		/*auto it=bricks.begin();
-		while(it!=bricks.end()){
-			if(it->checkCollision(ballEnt)){
-				ballEnt.collision((*it));
-				// erase invalidates the iterator
-				// use returned iterator
-				it = bricks.erase(it);
-			}else{
-				++it;
+		auto it3=powerups.begin();
+		while(it3!=powerups.end()){
+			it3->update(dt);
+			if(playerEnt.checkCollision(*it3)){
+				if(it3->type==ball && !balls.empty()){
+					Ball newBall(ballSprite,
+								vector_phys<phys_t>( (rand()%1000)/100.0f, -180.0f ),
+								nullptr);
+					auto pos = balls.begin()->getHitbox();
+					newBall.setPosition(pos.x,pos.y);
+					balls.push_back(newBall);
+				}
+				it3 = powerups.erase(it3);
+			} else if(it3->isFallen()){
+				it3 = powerups.erase(it3);
+			} else {
+				++it3;
 			}
-		}*/
-
-
-
-		if(playerEnt.checkCollision(/*ExtraBall t*/){
-			for(int i=0;i<2;i++){
-				Ball newBall(ballSprite, vector_phys<phys_t>(180.f*pow(-1,i),180.f), &playerEnt);// they should split up into three directions
-				balls.push_back(newBall);
-			}
-		}
-
-		if(playerEnt.checkCollision(/*Laser*/){
-		}
-		if(playerEnt.checkCollision(/*Enlarge*/){
-
-		}
-		if(playerEnt.checkCollision(/*ExtraBall t*/){
 		}
 
 		fpsText.str("");
 		fpsText << "FPS: " << 1.0f/dt;
 		testText.setString(fpsText.str());
 
-		//SDL_BlitScaled( gHelloWorld, NULL, screenSurface, &screenRect );
-		//SDL_UpdateWindowSurface( window ); // call after every blit
-
 		SDL_SetRenderDrawColor(renderer, 56, 60, 74, 255);
 		SDL_RenderClear(renderer); // clear the screen
 
-		// first null is srcrect, which is the entire texture
-		// seconde null is dstrect, which is the entire screen
-		//SDL_RenderCopy(renderer,testTexture, NULL, NULL);
-
 		playerEnt.render();
 		//ballEnt.render();
+		for(auto it=powerups.begin();it!=powerups.end();++it)it->render();
 		for(auto it=bricks.begin();it!=bricks.end();++it)it->render();
 		for(auto it=balls.begin();it!=balls.end();++it)it->render();
 

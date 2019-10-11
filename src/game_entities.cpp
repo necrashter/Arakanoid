@@ -43,6 +43,8 @@ void Ball::update(float delta){
 		setPosition(pos.x+pos.w/2.0f-hitbox.w/2.0f,pos.y-hitbox.h);
 	}else{
 		DynamicEntity::update(delta);
+		if(hitbox.x+hitbox.w>SCREEN_WIDTH && velocity.x>0 || velocity.x<0 && hitbox.x<0) velocity.flip_horizontal();
+		if(hitbox.y<0) velocity.flip_vertical();
 	}
 }
 
@@ -92,5 +94,6 @@ void Ball::barCollision(Bar& barr){
 
 Brick::Brick(Sprite sprite_arg, phys_t x, phys_t y):
 	Entity(sprite_arg){
+	type = none;
 	setPosition(x,y);
 }

@@ -17,6 +17,7 @@ public:
 	void setSprite_entity(SDL_Texture* texture_arg,
 	SDL_Rect textureRegion_arg,
 	SDL_Rect position_arg);
+	void setTextureRegion(SDL_Rect reg);
 
 	virtual bool checkCollision(const Entity& other);
 	bool checkHorizontalCollision(const Entity& other);
@@ -47,6 +48,8 @@ public:
 	virtual void update(float delta);
 
 	vector_phys<phys_t> getVelocity() const{ return velocity; }
+
+	bool isFallen();
 };
 
 

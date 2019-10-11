@@ -6,6 +6,14 @@
 extern const float MAX_BAR_SPEED;
 extern const float BAR_ACCELERATION;
 
+enum PowerUpType {
+	none,
+	ball,
+	gun,
+	enlarge,
+	shrink
+};
+
 class Bar: public DynamicEntity{
 public:
 	Bar(Sprite sprite_arg);
@@ -25,29 +33,15 @@ public:
 
 class Brick: public Entity{
 public:
+	PowerUpType type;
 	Brick(Sprite sprite_arg, phys_t x, phys_t y);
 	void breaking();
 };
 
 class PowerUp: public DynamicEntity{
 public:
-	PowerUp(Sprite sprite_arg,vector_phys<phys_t>  speed_arg):DynamicEntity(sprite_arg,speed_arg){}
-};
-
-class ExtraBall: public PowerUp{
-
-};
-
-class Laser: public PowerUp{
-
-};
-
-class Enlarge: public PowerUp{
-
-};
-
-class Reduce: public PowerUp{
-
+	PowerUpType type;
+	PowerUp(Sprite sprite_arg,vector_phys<phys_t> speed_arg):DynamicEntity(sprite_arg,speed_arg){}
 };
 
 
