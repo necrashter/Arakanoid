@@ -13,11 +13,14 @@ public:
 };
 
 class Ball: public DynamicEntity{
+private:
+	Bar* bar;
 public:
-	Ball(Sprite sprite_arg,vector_phys<phys_t> speed_arg);
+	Ball(Sprite sprite_arg,vector_phys<phys_t> speed_arg, Bar* parent);
 	void update(float delta);
 	void collision(Entity&);  //if horizontal  Ball.speed===negative_horizon, if vertical Ball.speed===negative_vertical (according to implemention of negative funcs. )
 	void barCollision(Bar&);
+	void throwBall();
 };
 
 class Brick: public Entity{

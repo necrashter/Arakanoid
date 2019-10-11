@@ -70,11 +70,11 @@ void game_loop(){
 
 	Sprite playerSprite(spriteSheet, SDL_Rect{25,190,71,25}, SDL_Rect{40,440,71,25});
 	Sprite yellowBrick(spriteSheet, SDL_Rect{5,70,67,27}, SDL_Rect{40,40,67,24});
-	Sprite ballSprite(spriteSheet, SDL_Rect{285,202,14,14}, SDL_Rect{SCREEN_WIDTH/2-7,SCREEN_HEIGHT/2-7,14,14});
+	Sprite ballSprite(spriteSheet, SDL_Rect{285,202,14,14}, SDL_Rect{320-7,400-7,14,14});
 
 	//DynamicEntity testEnt(testSprite, vector_phys<phys_t>(60.f,60.f));
 	Bar playerEnt(playerSprite);
-	Ball ballEnt(ballSprite, vector_phys<phys_t>(60.f,60.f));
+	Ball ballEnt(ballSprite, vector_phys<phys_t>(180.f,180.f), &playerEnt);
 	std::vector<Brick> bricks;
 	for(int i=0;i<9;++i){
 		for(int j=0;j<10;++j){
@@ -102,6 +102,8 @@ void game_loop(){
 				fprintf(stderr,"KEYDOWN: %d\n", e.key.keysym.sym);
 			} else if(e.type==SDL_KEYUP) {
 				fprintf(stderr,"KEYUP:   %d\n", e.key.keysym.sym);
+			} else if(e.type==SDL_MOUSEBUTTONDOWN){
+				ballEnt.throwBall();
 			}
 		} // end event handling
 
@@ -145,8 +147,6 @@ void game_loop(){
 		testText.render();
 
 		SDL_RenderPresent(renderer); // update
-
-
 
 		previousFrame = SDL_GetTicks();
 		Uint32 frameTime = SDL_GetTicks()-frameStart;
