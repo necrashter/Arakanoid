@@ -36,6 +36,25 @@ void Ball::update(float delta){
 	DynamicEntity::update(delta);
 }
 
+void Ball::collision(Entity* entity_arg){
+	string entityType= entity_arg->get_entityType();
+	if(entityType=="Brick"){
+		if(1/*according to collision,horizontal*/) velocity.flip_horizontal();
+		else velocity.flip_vertical();// vertical collision
+		((Brick*)entity_arg)->breaking();
+	}
+	else if(entityType=="Bar"){
+			if(1/*according to collision,vertical*/){
+				velocity.flip_vertical();
+				velocity.x+=((Bar*)entity_arg)->get_x();
+			}
+			else{
+				velocity.flip_horizontal();// horizontal collision
+				//is velocity.x+=((Bar*)entity_arg)->get_x(); needed or not?
+			}
+
+	}
+}
 
 Brick::Brick(Sprite sprite_arg, phys_t x, phys_t y):
 	Entity(sprite_arg){
