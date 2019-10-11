@@ -86,12 +86,14 @@ void game_loop(){
 	RenderedText testText("Hello World!",regular_font, SDL_Color{255,255,255,255});
 
 	Uint32 previousFrame = -MILLISECONDS_PER_FRAME;
+	Uint32 frameStart;
 	std::stringstream fpsText;
-	while(running)if(SDL_GetTicks() - previousFrame >= MILLISECONDS_PER_FRAME){
+	while(running){
+		frameStart = SDL_GetTicks();
 		// Get the time passed since last frame
 		// IN MILLISECONDS
 
-		float dt = ((float)(SDL_GetTicks() - previousFrame)) / 1000.0f; // delta time in seconds
+		float dt = ((float)(frameStart - previousFrame)) / 1000.0f; // delta time in seconds
 
 		while(SDL_PollEvent(&e)!=0){
 			if(e.type==SDL_QUIT){
@@ -144,7 +146,13 @@ void game_loop(){
 
 		SDL_RenderPresent(renderer); // update
 
+
+
 		previousFrame = SDL_GetTicks();
+		Uint32 frameTime = SDL_GetTicks()-frameStart;
+		if(frameTime<MILLISECONDS_PER_FRAME){
+			SDL_Delay(MILLISECONDS_PER_FRAME-frameTime);
+		}
 	} // end game loop
 }
 
