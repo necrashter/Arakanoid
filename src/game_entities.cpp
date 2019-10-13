@@ -51,7 +51,7 @@ void Ball::update(float delta){
 void Ball::throwBall(){
 	if(bar){
 		bar = nullptr;
-		velocity.x = 0;
+		velocity.x = -100.0f*pow(-1,rand());
 		velocity.y = -180.0f;
 	}
 }
