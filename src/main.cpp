@@ -12,6 +12,7 @@
 #include <vector>
 // for random
 #include <stdlib.h>
+#include<ctime>
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -96,11 +97,12 @@ void game_loop(){
 	balls.push_back(ballEnt);
 	std::vector<Brick> bricks;
 	std::vector<PowerUp> powerups;
-
+  srand(time(0)); //to prevent the same bonuses for every game
 	for(int i=0;i<9;++i){
 		for(int j=0;j<10;++j){
 			Brick newBrick(yellowBrick, 20+i*67, 40+j*24);
-			switch (rand()%10) {
+
+			switch (rand()%50) { //reduced rate of bonuses
 				case 0:
 				newBrick.setTextureRegion(redBrickRegion);
 				newBrick.type = gun;
@@ -213,11 +215,16 @@ void game_loop(){
 			if(playerEnt.checkCollision(*it3)){
 				if(it3->type==ball && !balls.empty()){
 					Ball newBall(ballSprite,
-								vector_phys<phys_t>( (rand()%1000)/100.0f, -180.0f ),
+								vector_phys<phys_t>( 100.0f, -200.0f ),
+								nullptr);
+					Ball newBall2(ballSprite,
+								vector_phys<phys_t>( -100.0f, -200.0f ),
 								nullptr);
 					auto pos = balls.begin()->getHitbox();
 					newBall.setPosition(pos.x,pos.y);
+					newBall2.setPosition(pos.x,pos.y);
 					balls.push_back(newBall);
+					balls.push_back(newBall2);
 				}
 				it3 = powerups.erase(it3);
 			} else if(it3->isFallen()){
