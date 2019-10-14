@@ -19,6 +19,10 @@ SDL_Rect position_arg){
 	sprite_entity.setPosition(position_arg);
 }
 
+void Entity::setTextureRegion(SDL_Rect reg){
+	sprite_entity.setTextureRegion(reg);
+}
+
 bool Entity::checkCollision(const Entity& other){
 	return hitbox.intersects(other.getHitbox());
 }
@@ -44,7 +48,8 @@ void Entity::positionUpdated(){
 void DynamicEntity::update(float delta) {
 	hitbox += velocity*delta;
 	positionUpdated();
+}
 
-	if(hitbox.x+hitbox.w>SCREEN_WIDTH && velocity.x>0 || velocity.x<0 && hitbox.x<0) velocity.flip_horizontal();
-	if(hitbox.y+hitbox.h>SCREEN_HEIGHT || hitbox.y<0) velocity.flip_vertical();
+bool DynamicEntity::isFallen(){
+	return hitbox.y>SCREEN_HEIGHT;
 }

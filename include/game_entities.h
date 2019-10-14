@@ -6,10 +6,30 @@
 extern const float MAX_BAR_SPEED;
 extern const float BAR_ACCELERATION;
 
+enum PowerUpType {
+	none,
+	ball,
+	gun,
+	enlarge,
+	shrink
+};
+
 class Bar: public DynamicEntity{
+private:
+	int sizeLevel = 0;
+	Sprite leftGun,rightGun;
+	bool hasGuns;
+	void positionUpdated();
 public:
-	Bar(Sprite sprite_arg);
+	Bar(Sprite sprite_arg,Sprite gunSprite);
 	void update(float delta);
+	void changeSize(int new_size, SDL_Rect& new_reg);
+	int getSizeLevel() const;
+	void arm();
+	bool getHasGuns() const;
+	vector_phys<phys_t> getLeftBulletPos() const;
+	vector_phys<phys_t> getRightBulletPos() const;
+	void render();
 };
 
 class Ball: public DynamicEntity{
@@ -25,29 +45,20 @@ public:
 
 class Brick: public Entity{
 public:
+	PowerUpType type;
 	Brick(Sprite sprite_arg, phys_t x, phys_t y);
 	void breaking();
 };
 
 class PowerUp: public DynamicEntity{
 public:
-	PowerUp(Sprite sprite_arg,vector_phys<phys_t>  speed_arg):DynamicEntity(sprite_arg,speed_arg){}
+	PowerUpType type;
+	PowerUp(Sprite sprite_arg,vector_phys<phys_t> speed_arg):DynamicEntity(sprite_arg,speed_arg){}
 };
 
-class ExtraBall: public PowerUp{
-
-};
-
-class Laser: public PowerUp{
-
-};
-
-class Enlarge: public PowerUp{
-
-};
-
-class Reduce: public PowerUp{
-
+class Bullet: public DynamicEntity{
+public:
+	Bullet(Sprite sprite_arg,vector_phys<phys_t> speed_arg):DynamicEntity(sprite_arg,speed_arg){}
 };
 
 

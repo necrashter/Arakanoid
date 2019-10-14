@@ -8,7 +8,7 @@ class Entity{
 protected:
 	Sprite sprite_entity;
 	box_phys<phys_t> hitbox;
-	void positionUpdated();
+	virtual void positionUpdated();
 public:
 	Entity(Sprite sprite_arg);
 
@@ -17,11 +17,12 @@ public:
 	void setSprite_entity(SDL_Texture* texture_arg,
 	SDL_Rect textureRegion_arg,
 	SDL_Rect position_arg);
+	void setTextureRegion(SDL_Rect reg);
 
 	virtual bool checkCollision(const Entity& other);
 	bool checkHorizontalCollision(const Entity& other);
 	bool checkVerticalCollision(const Entity& other);
-	void render();
+	virtual void render();
 
 	void setPosition(vector_phys<phys_t> position_arg){
 		hitbox.x = position_arg.x;
@@ -47,6 +48,8 @@ public:
 	virtual void update(float delta);
 
 	vector_phys<phys_t> getVelocity() const{ return velocity; }
+
+	bool isFallen();
 };
 
 
