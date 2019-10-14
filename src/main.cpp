@@ -56,7 +56,12 @@ bool sdl_init() {
 	return true;
 }
 
+
+SDL_Rect* brickExplosionFrames = nullptr;
+//SDL_Rect* brickExplosionFrames = nullptr;
+
 void quit() {
+	delete[] brickExplosionFrames;
 	free_resources();
 
 	SDL_DestroyRenderer(renderer);
@@ -81,6 +86,14 @@ SDL_Rect mediumBarRegion = {25,220,138,25};
 SDL_Rect bigBarRegion = {25,252,204,25};
 
 const vector_phys<phys_t> bulletVelocity(0,-360.0);
+
+void loadFrames(){
+	brickExplosionFrames=new SDL_Rect[12]();
+	for(int i=0;i<12;++i){
+		brickExplosionFrames[i] = {(i%4)*160,(i/4)*154,160,154};
+	}
+}
+
 
 void game_loop(){
 	bool running = true;
@@ -107,6 +120,7 @@ void game_loop(){
 	std::vector<Brick> bricks;
 	std::vector<PowerUp> powerups;
 	std::vector<Bullet> bullets;
+	std::vector<AnimatedSprite> animations;
 	srand(time(0)); //to prevent the same bonuses for every game
 	for(int i=0;i<9;++i){
 		for(int j=0;j<10;++j){
@@ -173,6 +187,12 @@ void game_loop(){
 		} // end event handling
 
 		playerEnt.update(dt);
+
+		auto animit=animations.begin();
+		while(animit!=animations.end()){
+			if(animit->update(dt))animit = animations.erase(animit);
+			else ++animit;
+		}
 		//ballEnt.update(dt);
 
 		auto it2=balls.begin();
@@ -200,6 +220,9 @@ void game_loop(){
 						}
 						powerups.push_back(newPowerUp);
 					}
+					// add the animation
+					AnimatedSprite testAnim(brickExplosionTexture,brickExplosionFrames,12,it->getHitbox().x-46,it->getHitbox().y-60);
+					animations.push_back(testAnim);
 					// erase invalidates the iterator
 					// use returned iterator
 					it = bricks.erase(it);
@@ -304,6 +327,8 @@ void game_loop(){
 		for(auto it=bullets.begin();it!=bullets.end();++it)it->render();
 		for(auto it=balls.begin();it!=balls.end();++it)it->render();
 
+		for(auto it=animations.begin();it!=animations.end();++it)it->render();
+
 		livesRenderedText.render();
 
 		SDL_RenderPresent(renderer); // update
@@ -322,6 +347,7 @@ int main( int argc, char* args[] ) {
 		fprintf(stderr,"SDL couldn't initialize.\n");
 	}else{
 		load_resources();
+		loadFrames();
 		game_loop();
 	}
 	quit();

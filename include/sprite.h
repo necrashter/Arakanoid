@@ -9,7 +9,7 @@
 #include "load_resources.h"
 
 class Sprite {
-private:
+protected:
 	SDL_Texture* texture;
 	SDL_Rect textureRegion;
 	SDL_Rect position;
@@ -54,6 +54,20 @@ public:
 
 	std::string getString() const { return m_str; }
 	void setString(const std::string str); // we need to update the texture
+};
+
+class AnimatedSprite: public Sprite {
+private:
+	SDL_Rect* frames;
+	int length;
+	int current_frame;
+	float speed;
+	float timeSinceLastFrame;
+public:
+	AnimatedSprite(SDL_Texture* texture_arg,
+		SDL_Rect* frames_arg, int len,
+		int x, int y);
+	bool update(float delta);
 };
 
 #endif

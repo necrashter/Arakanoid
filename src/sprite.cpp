@@ -57,3 +57,22 @@ void RenderedText::createTexture(){
         SDL_FreeSurface( textSurface );
     }
 }
+
+
+AnimatedSprite::AnimatedSprite(SDL_Texture* texture_arg,SDL_Rect* frames_arg,int len, int x, int y):
+	Sprite(texture_arg, frames_arg[0], SDL_Rect{x,y,frames_arg[0].w,frames_arg[0].h}),
+	 frames(frames_arg), length(len){
+		current_frame=0;
+		speed = 45.f;
+		timeSinceLastFrame=  0;
+	}
+
+bool AnimatedSprite::update(float delta){
+	timeSinceLastFrame+=delta;
+	if(timeSinceLastFrame>=1.0f/speed){
+		if(current_frame==length-1)return true;
+		timeSinceLastFrame-=1.0f/speed;
+		textureRegion=frames[++current_frame];
+	}
+	return false;
+}
