@@ -15,9 +15,21 @@ enum PowerUpType {
 };
 
 class Bar: public DynamicEntity{
+private:
+	int sizeLevel = 0;
+	Sprite leftGun,rightGun;
+	bool hasGuns;
+	void positionUpdated();
 public:
-	Bar(Sprite sprite_arg);
+	Bar(Sprite sprite_arg,Sprite gunSprite);
 	void update(float delta);
+	void changeSize(int new_size, SDL_Rect& new_reg);
+	int getSizeLevel() const;
+	void arm();
+	bool getHasGuns() const;
+	vector_phys<phys_t> getLeftBulletPos() const;
+	vector_phys<phys_t> getRightBulletPos() const;
+	void render();
 };
 
 class Ball: public DynamicEntity{
@@ -42,6 +54,11 @@ class PowerUp: public DynamicEntity{
 public:
 	PowerUpType type;
 	PowerUp(Sprite sprite_arg,vector_phys<phys_t> speed_arg):DynamicEntity(sprite_arg,speed_arg){}
+};
+
+class Bullet: public DynamicEntity{
+public:
+	Bullet(Sprite sprite_arg,vector_phys<phys_t> speed_arg):DynamicEntity(sprite_arg,speed_arg){}
 };
 
 

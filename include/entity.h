@@ -8,7 +8,7 @@ class Entity{
 protected:
 	Sprite sprite_entity;
 	box_phys<phys_t> hitbox;
-	void positionUpdated();
+	virtual void positionUpdated();
 public:
 	Entity(Sprite sprite_arg);
 
@@ -22,7 +22,7 @@ public:
 	virtual bool checkCollision(const Entity& other);
 	bool checkHorizontalCollision(const Entity& other);
 	bool checkVerticalCollision(const Entity& other);
-	void render();
+	virtual void render();
 
 	void setPosition(vector_phys<phys_t> position_arg){
 		hitbox.x = position_arg.x;
