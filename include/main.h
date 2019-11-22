@@ -16,7 +16,7 @@ extern SDL_Window* window;
 extern SDL_Surface* screenSurface;
 // renderer for window, hardware rendering
 extern SDL_Renderer* renderer;
-
+extern SDL_Rect* brickExplosionFrames;
 
 bool sdl_init();
 void quit();
