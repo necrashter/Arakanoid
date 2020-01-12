@@ -20,6 +20,7 @@ SDL_Surface* screenSurface = NULL;
 SDL_Renderer* renderer = NULL;
 
 Screen* currentScreen = NULL; // the screen that's shown
+Screen* nextScreen = NULL;
 
 bool sdl_init() {
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
@@ -109,6 +110,11 @@ void game_loop(){
 
 		SDL_RenderPresent(renderer); // update
 
+		if(nextScreen != NULL){
+			delete currentScreen;
+			currentScreen = nextScreen;
+			nextScreen = NULL;
+		}
 		previousFrame = SDL_GetTicks();
 		Uint32 frameTime = SDL_GetTicks()-frameStart;
 		if(frameTime<MILLISECONDS_PER_FRAME){
@@ -120,8 +126,7 @@ void game_loop(){
 }
 
 void set_screen(GameScreen* newScreen){
-	delete currentScreen;
-	currentScreen = newScreen;
+	nextScreen = newScreen;
 }
 
 int main( int argc, char* args[] ) {

@@ -250,7 +250,7 @@ void StartScreen::render() {
 }
 
 void StartScreen::handleEvent(SDL_Event &e){
-	if(e.type==SDL_KEYDOWN) {
+	if(e.type==SDL_KEYUP) {
 		if(e.key.keysym.sym == SDLK_RETURN){
 			set_screen(new GameScreen());
 		}
