@@ -1,5 +1,6 @@
 #include "screen.h"
 
+#include "main.h"
 
 SDL_Rect redBrickRegion = {83,70,67,27};
 SDL_Rect greenBrickRegion = {165,70,67,27};
@@ -229,6 +230,29 @@ void GameScreen::handleEvent(SDL_Event &e){
 			rb.setPosition(playerEnt.getRightBulletPos());
 			bullets.push_back(lb);
 			bullets.push_back(rb);
+		}
+	}
+}
+
+
+// Start Screen
+StartScreen::StartScreen () :
+	menuText("PRESS ENTER TO START",regular_font, SDL_Color{255,255,255,255}) {
+
+}
+
+void StartScreen::update(float dt) {
+	// nothing?
+}
+
+void StartScreen::render() {
+	menuText.render();
+}
+
+void StartScreen::handleEvent(SDL_Event &e){
+	if(e.type==SDL_KEYDOWN) {
+		if(e.key.keysym.sym == SDLK_RETURN){
+			set_screen(new GameScreen());
 		}
 	}
 }

@@ -5,6 +5,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "screen.h"
+
 extern const int SCREEN_WIDTH ;
 extern const int SCREEN_HEIGHT ;
 
@@ -18,10 +20,15 @@ extern SDL_Surface* screenSurface;
 extern SDL_Renderer* renderer;
 extern SDL_Rect* brickExplosionFrames;
 
+extern Screen* currentScreen;
+
 bool sdl_init();
 void quit();
 
 // main game loop
 void game_loop();
+
+// change the GameScreen while running
+void set_screen(GameScreen* newScreen);
 
 #endif

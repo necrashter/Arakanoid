@@ -9,7 +9,6 @@
 #include "entity.h"
 #include "game_entities.h"
 #include "load_resources.h"
-#include "main.h"
 
 // dynamic array
 #include <vector>
@@ -49,6 +48,16 @@ private:
 
 	std::stringstream livesText;
 	RenderedText livesRenderedText;
+};
+
+class StartScreen : public Screen {
+public:
+	StartScreen();
+	void update(float dt);
+	void render();
+	void handleEvent(SDL_Event &e);
+private:
+	RenderedText menuText;
 };
 
 

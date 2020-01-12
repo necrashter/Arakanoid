@@ -19,6 +19,8 @@ SDL_Window* window = NULL;
 SDL_Surface* screenSurface = NULL;
 SDL_Renderer* renderer = NULL;
 
+Screen* currentScreen = NULL; // the screen that's shown
+
 bool sdl_init() {
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
 		fprintf(stderr, "SDL_Init failed! SDL_Error: %s\n", SDL_GetError() );
@@ -65,6 +67,7 @@ void load_frames(){
 
 void quit() {
 	delete[] brickExplosionFrames;
+	delete currentScreen;
 	free_resources();
 
 	SDL_DestroyRenderer(renderer);
@@ -82,7 +85,8 @@ void game_loop(){
 
 	srand(time(0)); //to prevent the same bonuses for every game
 
-	Screen *currentScreen = new GameScreen();
+	// first screen
+	Screen *currentScreen = new StartScreen();//GameScreen();
 
 	Uint32 previousFrame = -MILLISECONDS_PER_FRAME;
 	Uint32 frameStart;
@@ -111,9 +115,14 @@ void game_loop(){
 			SDL_Delay(MILLISECONDS_PER_FRAME-frameTime);
 		}
 	} // end game loop
-	delete currentScreen;
+	// deleted at quit()
+	//delete currentScreen;
 }
 
+void set_screen(GameScreen* newScreen){
+	delete currentScreen;
+	currentScreen = newScreen;
+}
 
 int main( int argc, char* args[] ) {
 	if(!sdl_init()){
