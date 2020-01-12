@@ -56,7 +56,7 @@ bool sdl_init() {
 
 SDL_Rect* brickExplosionFrames = nullptr;
 
-void loadFrames(){
+void load_frames(){
 	brickExplosionFrames=new SDL_Rect[12]();
 	for(int i=0;i<12;++i){
 		brickExplosionFrames[i] = {(i%4)*160,(i/4)*154,160,154};
@@ -120,7 +120,7 @@ int main( int argc, char* args[] ) {
 		fprintf(stderr,"SDL couldn't initialize.\n");
 	}else{
 		load_resources();
-		loadFrames();
+		load_frames();
 		game_loop();
 	}
 	quit();
