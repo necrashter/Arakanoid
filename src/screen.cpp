@@ -167,6 +167,7 @@ void GameScreen::update(float dt){
 				);
 			}else if(it->type==gun){
 				playerEnt.arm();
+				playerEnt.setBulletNumber(10);
 			}
 			it = powerups.erase(it);
 		} else if(it->isFallen()){
@@ -242,7 +243,8 @@ void GameScreen::handleEvent(SDL_Event &e){
 		fprintf(stderr,"KEYUP:   %d\n", e.key.keysym.sym);
 	} else if(e.type==SDL_MOUSEBUTTONDOWN){
 		if(!balls.empty())balls.begin()->throwBall();
-		if(playerEnt.getHasGuns()){ // change to canShoot
+		if(playerEnt.getHasGuns() && playerEnt.getBulletNumber()>0){ // change to canShoot
+			playerEnt.setBulletNumber(playerEnt.getBulletNumber()-1);
 			Bullet lb(bulletSprite,bulletVelocity);
 			lb.setPosition(playerEnt.getLeftBulletPos());
 			Bullet rb(bulletSprite,bulletVelocity);

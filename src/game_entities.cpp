@@ -15,6 +15,7 @@ Bar::Bar(Sprite sprite_arg, Sprite gunSprite):
 	DynamicEntity(sprite_arg,vector_phys<phys_t>(0,0)),
 	leftGun(gunSprite),rightGun(gunSprite){
 		hasGuns=false;
+		bulletNumber=0;
 }
 
 void Bar::positionUpdated(){
@@ -83,6 +84,14 @@ void Bar::render(){
 		leftGun.render();
 		rightGun.render();
 	}
+}
+
+int Bar::getBulletNumber(){
+	return bulletNumber;
+}
+
+void Bar::setBulletNumber(int x){
+	bulletNumber=x;
 }
 
 

@@ -17,6 +17,7 @@ enum PowerUpType {
 class Bar: public DynamicEntity{
 private:
 	int sizeLevel = 0;
+	int bulletNumber=0;
 	Sprite leftGun,rightGun;
 	bool hasGuns;
 	void positionUpdated();
@@ -30,6 +31,8 @@ public:
 	vector_phys<phys_t> getLeftBulletPos() const;
 	vector_phys<phys_t> getRightBulletPos() const;
 	void render();
+	int getBulletNumber();
+	void setBulletNumber(int x);
 };
 
 class Ball: public DynamicEntity{
