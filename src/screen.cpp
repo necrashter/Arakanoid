@@ -183,6 +183,22 @@ void GameScreen::update(float dt){
 		while(it2!=bricks.end()){
 			if(it3->checkCollision(*it2)){
 				it3 = bullets.erase(it3);
+				// powerups
+				if(it2->type!=none){
+					PowerUp newPowerUp(shrinkPowerUp, vector_phys<phys_t>(0,99.9f));
+					newPowerUp.setPosition(it2->getHitbox().x-2, it2->getHitbox().y);
+					switch (newPowerUp.type=it2->type) {
+						case ball: newPowerUp.setTextureRegion(ballRegion);
+						break;
+						case gun: newPowerUp.setTextureRegion(gunRegion);
+						break;
+						case enlarge: newPowerUp.setTextureRegion(growRegion);
+						break;
+					}
+					powerups.push_back(newPowerUp);
+				}
+
+
 				it2= bricks.erase(it2);
 				if(bricks.empty()){
 					//printf("You won\n");
