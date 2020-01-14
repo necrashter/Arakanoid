@@ -265,6 +265,8 @@ void StartScreen::update(float dt) {
 }
 
 void StartScreen::render() {
+	SDL_SetRenderDrawColor(renderer, 56, 60, 74, 255);
+	SDL_RenderClear(renderer); // clear the screen
 	menuText.render();
 }
 
@@ -287,6 +289,8 @@ void RestartScreen::update(float dt) {
 }
 
 void RestartScreen::render() {
+	SDL_SetRenderDrawColor(renderer, 56, 60, 74, 255);
+	SDL_RenderClear(renderer); // clear the screen
 	menuText.render();
 }
 
