@@ -60,5 +60,13 @@ private:
 	RenderedText menuText;
 };
 
-
+class RestartScreen : public Screen {
+public:
+	RestartScreen();
+	void update(float dt);
+	void render();
+	void handleEvent(SDL_Event &e);
+private:
+	RenderedText menuText;
+};
 #endif

@@ -109,7 +109,8 @@ void GameScreen::update(float dt){
 				// use returned iterator
 				it = bricks.erase(it);
 				if(bricks.empty()){
-					printf("You won\n");
+					//printf("You won\n");
+					set_screen((GameScreen*)new RestartScreen());
 				}
 			}else{
 				++it;
@@ -126,7 +127,8 @@ void GameScreen::update(float dt){
 				livesText << "Lives: " << lives;
 				livesRenderedText.setString(livesText.str());
 				if(lives<=0){
-					printf("You lose\n");
+					//printf("You lose\n");
+					set_screen((GameScreen*)new RestartScreen());
 				}else{
 					Ball newBall(ballSprite, vector_phys<phys_t>(180.f,180.f), &playerEnt);
 					balls.push_back(newBall);
@@ -183,7 +185,8 @@ void GameScreen::update(float dt){
 				it3 = bullets.erase(it3);
 				it2= bricks.erase(it2);
 				if(bricks.empty()){
-					printf("You won\n");
+					//printf("You won\n");
+					set_screen((GameScreen*)new RestartScreen());
 				}
 				goto bulletsLoopEnd;
 			}else{
@@ -250,6 +253,28 @@ void StartScreen::render() {
 }
 
 void StartScreen::handleEvent(SDL_Event &e){
+	if(e.type==SDL_KEYUP) {
+		if(e.key.keysym.sym == SDLK_RETURN){
+			set_screen(new GameScreen());
+		}
+	}
+}
+
+// Restart Screen
+RestartScreen::RestartScreen () :
+	menuText("PRESS ENTER TO RESTART",regular_font, SDL_Color{255,255,255,255}) {
+
+}
+
+void RestartScreen::update(float dt) {
+	// nothing?
+}
+
+void RestartScreen::render() {
+	menuText.render();
+}
+
+void RestartScreen::handleEvent(SDL_Event &e){
 	if(e.type==SDL_KEYUP) {
 		if(e.key.keysym.sym == SDLK_RETURN){
 			set_screen(new GameScreen());
